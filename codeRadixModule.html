@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<script type="text/javascript">
+//Starts the revolver
+var startrevolver=function () {
+	if (currentDial > 3) {
+		//displayPrevious (previousWord);
+		previousWord=" ";
+	}
+	var target="#dial" + currentDial;
+	var elem=document.querySelector (target);
+	elem.innerHTML="*";
+	//elem.addEventListener ("mouserelease", function () {
+	//	stoprevolver;
+	//});
+	intervalId=window.setInterval (function () {
+		move ();
+	}, 50);
+	displayIntervalId=window.setInterval (function () {
+		characterShuffle (currentDial);
+	}, 100);
+};
+
+//Stops the revolver
+function stoprevolver () {
+	window.clearInterval (intervalId);
+	window.clearInterval (displayIntervalId);
+	var word="";
+	var index= 13 * current % MAX_VALUE;
+	word=words[index];
+	var target="#dial" + currentDial;
+	var elem=document.querySelector (target);
+	elem.innerHTML=word;
+	previousWord=previousWord + word;
+	currentDial+=1;
+	
+};
+
+//displays Previous word
+function displayPrevious (word) {
+	if (word != "") {
+		var target="#list";
+		var elem=document.querySelector (target);
+		elem.innerHTML=previousWord;
+		if (hasPrevious == 0) {
+			target="#listTitle";
+			elem=document.querySelector (target);
+			elem.innerHTML="Previous code: ";
+			hasPrevious=1;
+		}
+	}
+};
+
+//Iterates through the character array
+function characterShuffle (elemId) {
+	var target="#dial" + elemId;
+	var elem=document.querySelector (target);
+	elem.innerHTML=characters[currentCharacterIndex];
+	currentCharacterIndex+=1;
+	if (currentCharacterIndex >= characters.length) {
+		currentCharacterIndex=1;
+	}
+};
+	
+var characters=[
+	"-",
+	"*",
+	"?",
+	"!"
+];
+
+var currentCharacterIndex=1;
+
+var words=[
+	"A",
+	"B",
+	"C",
+	"D",
+	"E",
+	"F",
+	"G",
+	"H",
+	"I",
+	"J",
+	"K",
+	"L",
+	"M",
+	"N",
+	"O",
+	"P",
+	"Q",
+	"R",
+	"S",
+	"T",
+	"U",
+	"V",
+	"W",
+	"X",
+	"Y",
+	"Z"
+];
+	
+
+var current=0;
+
+var MAX_VALUE=24;
+
+var previousWord="";
+
+var currentDial=1;
+
+var intervalId="";
+
+var displayIntervalId="";
+
+//Iterates through the minimum and maximum indicies in an array.
+function move () {
+	current+=1;
+	if (current > MAX_VALUE) {
+		current=0;
+	}
+};
+
+//Restarts the timers for the current iterations.
+function restart () {
+	previousWord="";
+	currentDial=1;
+	var target="#dial"+currentDial;
+	var elem=document.querySelector (target);
+	elem.innerHTML="-";
+	currentDial+=1;
+	target="#dial"+currentDial;
+	elem=document.querySelector (target);
+	elem.innerHTML="-";
+	currentDial+=1;
+	target="#dial"+currentDial;
+	elem=document.querySelector (target);
+	elem.innerHTML="-";
+	currentDial=1;
+};
+
+</script>
+</head>
+<body>
+	<div class="display" style="display:block;width:100%;text-align:center;padding-top:20px;">
+		<h2>Generate a new code:</h2>
+		<div id="dial1" style="display:inline-block;font-size:100px;">-</div>
+		<div id="dial2" style="display:inline-block;font-size:100px;">-</div>
+		<div id="dial3" style="display:inline-block;font-size:100px;">-</div>
+		<br />
+		<button id="startButton"  onmousedown="startrevolver()" onmouseup="stoprevolver()" style="display:inline-block;text-align:center;">Start</button>
+		<button id="restart" onclick="restart()" style="display:inline-block;text-align:center;">Restart</button>
+	</div>
+
+	<div id="listTitle"></div>
+	<div id="list"></div>
+
+</body>
+</html>
